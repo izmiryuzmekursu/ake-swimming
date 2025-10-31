@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="light" lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ake Swimming Kursları - Profesyonel Yüzme Dersleri</title>
+<link rel="icon" type="image/png" sizes="32x32" href="ake-latest-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="ake-latest-icon.png">
+<link rel="apple-touch-icon" href="ake-latest-icon.png">
+<meta name="theme-color" content="#005f73">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; }
+
+  /* ==== Dinamik dokunuşlar ==== */
+  /* Fade-up reveal */
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  /* Blur-up lazy images */
+  .lazy-img { filter: blur(10px); transform: scale(1.02); transition: filter .5s ease, transform .6s ease; }
+  .lazy-img.loaded { filter: blur(0); transform: scale(1); }
+  /* Motion tercihi */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { transition: none; transform: none; opacity: 1; }
+    .lazy-img { transition: none; filter: none; transform: none; }
+  }
+</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: "#005f73",
+          "primary-accent": "#0a9396",
+          "background-light": "#F8F9FA",
+          "background-dark": "#101c22",
+          "text-light": "#343A40",
+          "text-dark": "#E9ECEF",
+        },
+        fontFamily: { display: ["Public Sans","sans-serif"] },
+        borderRadius: { DEFAULT:"0.25rem", lg:"0.5rem", xl:"0.75rem", full:"9999px" },
+      },
+    },
+  };
+</script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+
+<!-- İLETİŞİM ÜST PANELİ (mini kart) -->
+<div id="contactBar" class="fixed left-0 right-0 top-0 z-[60] hidden">
+  <div class="mx-auto max-w-6xl px-4 pt-2">
+    <div class="rounded-xl border border-primary/20 bg-white/95 p-4 shadow-lg backdrop-blur dark:bg-background-dark/95">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-2xl">chat</span>
+          <div>
+            <p class="text-sm text-text-light/70 dark:text-text-dark/70">Hızlı iletişim</p>
+            <p id="displayPhone" class="font-bold text-text-light dark:text-text-dark">+90 534 586 10 01</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a id="waLink" target="_blank"
+             class="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">WhatsApp’a Yaz</a>
+          <a id="telLink"
+             class="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800">Ara</a>
+          <button id="closeBar" class="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /İLETİŞİM ÜST PANELİ -->
+
+<div class="relative flex min-h-screen w-full flex-col">
+
+<header class="sticky top-0 z-50 flex items-center justify-center border-b border-gray-200/50 bg-background-light/80 px-4 py-3 backdrop-blur-sm dark:border-gray-700/50 dark:bg-background-dark/80 md:px-10">
+  <div class="flex w-full max-w-6xl items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="ake-latest-icon.png" alt="Ake Swimming Logo" class="w-12 h-12 rounded-full">
+      <h2 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">Ake Swimming</h2>
+    </div>
+
+    <nav class="hidden items-center gap-8 md:flex">
+      <a class="text-sm font-medium hover:text-primary-accent dark:hover:text-primary-accent" href="index.html">Ana Sayfa</a>
+      <a class="text-sm font-medium hover:text-primary-accent dark:hover:text-primary-accent" href="hakkimizda.html">Hakkımızda</a>
+      <a class="text-sm font-medium hover:text-primary-accent dark:hover:text-primary-accent" href="derslerimiz.html">Derslerimiz</a>
+      <a class="text-sm font-medium hover:text-primary-accent dark:hover:text-primary-accent" href="#">Blog</a>
+      <a id="navContact" class="text-sm font-medium hover:text-primary-accent dark:hover:text-primary-accent cursor-pointer">İletişim</a>
+    </nav>
+
+    <div class="hidden items-center md:flex">
+      <button id="btnContact" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-primary/90">
+        <span class="truncate">İletişim</span>
+      </button>
+    </div>
+    <div class="md:hidden">
+      <button class="text-text-light dark:text-text-dark">
+        <span class="material-symbols-outlined text-3xl"> menu </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="flex-grow">
+<section class="relative">
+  <div class="flex min-h-[60vh] flex-col items-center justify-center bg-cover bg-center bg-no-repeat px-4 py-16 text-center md:min-h-[70vh] lg:min-h-[80vh]"
+       style='background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%), url("ake-2-gorsel.jpg");'>
+    <div class="flex max-w-3xl flex-col items-center gap-4">
+      <h1 class="text-4xl font-black leading-tight tracking-tighter text-white md:text-5xl lg:text-6xl">Doğru Teknikle Yüzmeyi Öğrenin</h1>
+      <p class="text-base font-normal leading-normal text-white/90 md:text-lg">Yetişkinler ve çocuklar için her seviyeye uygun profesyonel yüzme derslerimizle suda kendinizi güvende ve özgür hissedin. Uzman eğitmenlerimizle hedeflerinize ulaşın.</p>
+    </div>
+  </div>
+</section>
+
+<section class="bg-white dark:bg-background-dark/50 py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="grid grid-cols-1 items-center gap-12 md:grid-cols-2 lg:gap-16">
+      <div class="flex flex-col">
+        <h2 class="text-3xl font-bold tracking-tight text-primary sm:text-4xl">Neden Aqua Yüzme Kursları?</h2>
+        <p class="mt-4 text-base leading-relaxed text-text-light dark:text-text-dark/80">Misyonumuz, her yaştan bireye yüzme sporunu sevdirmek ve suyun içinde güvenle hareket etmelerini sağlamaktır. Sadece yüzme öğretmiyor, aynı zamanda bir yaşam becerisi kazandırıyoruz. Modern tesisimiz, öğrenci odaklı yaklaşımımız ve sertifikalı eğitmenlerimizle fark yaratıyoruz.</p>
+        <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div class="flex items-start gap-4">
+            <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary"><span class="material-symbols-outlined"> school </span></div>
+            <div><h3 class="font-bold">Uzman Eğitmenler</h3><p class="text-sm text-text-light/80 dark:text-text-dark/70">Deneyimli ve pedagojik formasyona sahip kadro.</p></div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary"><span class="material-symbols-outlined"> diversity_3 </span></div>
+            <div><h3 class="font-bold">Kişiye Özel Programlar</h3><p class="text-sm text-text-light/80 dark:text-text-dark/70">Her seviyeye ve hedefe uygun ders içerikleri.</p></div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary"><span class="material-symbols-outlined"> pool </span></div>
+            <div><h3 class="font-bold">Modern ve Hijyenik Tesis</h3><p class="text-sm text-text-light/80 dark:text-text-dark/70">Güvenli ve temiz bir öğrenme ortamı.</p></div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary"><span class="material-symbols-outlined"> sentiment_very_satisfied </span></div>
+            <div><h3 class="font-bold">Eğlenceli ve Destekleyici Ortam</h3><p class="text-sm text-text-light/80 dark:text-text-dark/70">Öğrenme sürecini keyifli hale getiriyoruz.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <img alt="Modern yüzme tahtaları ve profesyonel ekipmanlar" class="aspect-[4/3] w-full rounded-xl object-cover" height="225" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB78w0YLS4vNc6-u8AFqzaaCI1clilNkxeqYqzFRNQWNnNOKp2TMO-qFmW-JXaFYeIMSWK6LhuYnIyKRUZK3XoDwd8sIG9oifj7kwI5QHCasiJXtJtyQq8YpMTdcIvIm2KOVtCQKQ8ltscODQN9I9Pc3X4oCt1Xug_EiVG68LONwd60CirYHsVp8wLzrXGbygCpWPYZEVJcAfA6KlV4xs1NXeK8myrWA3PZ37_8lhjNPGjkxl3FBwE5ioZ44ljlCT7BVKXfW2YUYQg" width="300"/>
+        <img alt="Profesyonel yüzme paletleri havuz kenarında" class="aspect-[4/3] w-full rounded-xl object-cover" height="225" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkn1ZRYPsR_9HoLBsvvFxvlzpSYVzhHpSk2XxwjxMkrBjw5XC-eDOO44WlSWaGtTl78jHqu17oYHxLLvJyMCEUrtGvZ8uiGDLyJqLwoCFYpXxsbWE8B09U_dVixpShOkGOuSpN67QHsxDdnbZOqlGc2Td7rDTv7Kz0s5RfRwZyCLY9a0Be0TxfIIOQlh-fQD-t9fWgnFsIPMTfVwnTVgrhLT4Z1r1rnVzmZJU-3kve2F3RvLtCdajJtWtc7_TWsEMpn8U0fo7VAhw" width="300"/>
+        <img alt="Sakin ve modern bir yüzme havuzunun genel görünümü" class="col-span-2 w-full rounded-xl object-cover" height="250" src="ake-pool.jpg" width="600"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-background-light dark:bg-background-dark py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="mx-auto max-w-3xl pb-12 text-center">
+      <h2 class="text-3xl font-bold tracking-tight text-primary sm:text-4xl">Herkes İçin Yüzme Dersleri</h2>
+      <p class="mt-4 text-base leading-relaxed text-text-light dark:text-text-dark/80">İster yeni başlıyor olun, ister tekniğinizi geliştirmek isteyin; yetişkinler ve çocuklar için özel olarak hazırladığımız kurs programlarımızla hedeflerinize ulaşmanıza yardımcı oluyoruz.</p>
+    </div>
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <div class="flex flex-col overflow-hidden rounded-xl border border-gray-200/80 bg-white dark:border-gray-700/50 dark:bg-background-dark/50">
+        <img alt="Yüzme dersi alan yetişkinler" class="h-60 w-full object-cover" src="ake-deep.jpg"/>
+        <div class="flex flex-1 flex-col p-6">
+          <h3 class="text-2xl font-bold text-text-light dark:text-text-dark">Yetişkin Yüzme Kursları</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-text-light/80 dark:text-text-dark/70">Su korkusunu yenmek, yeni bir hobi edinmek veya stilinizi mükemmelleştirmek için tasarlanmış, her seviyeye uygun programlar. Grup veya özel ders seçenekleriyle size en uygun eğitimi alın.</p>
+          <button class="mt-6 w-full rounded-lg bg-primary-accent px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-primary-accent/90 sm:w-auto">Detaylı Bilgi</button>
+        </div>
+      </div>
+      <div class="flex flex-col overflow-hidden rounded-xl border border-gray-200/80 bg-white dark:border-gray-700/50 dark:bg-background-dark/50">
+        <img alt="Yüzme dersi alan çocuklar" class="h-60 w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkn1ZRYPsR_9HoLBsvvFxvlzpSYVzhHpSk2XxwjxMkrBjw5XC-eDOO44WlSWaGtTl78jHqu17oYHxLLvJyMCEUrtGvZ8uiGDLyJqLwoCFYpXxsbWE8B09U_dVixpShOkGOuSpN67QHsxDdnbZOqlGc2Td7rDTv7Kz0s5RfRwZyCLY9a0Be0TxfIIOQlh-fQD-t9fWgnFsIPMTfVwnTVgrhLT4Z1r1rnVzmZJU-3kve2F3RvLtCdajJtWtc7_TWsEMpn8U0fo7VAhw"/>
+        <div class="flex flex-1 flex-col p-6">
+          <h3 class="text-2xl font-bold text-text-light dark:text-text-dark">Çocuk Yüzme Kursları</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-text-light/80 dark:text-text-dark/70">Oyun temelli metodolojimizle çocukların suyu sevmesini ve temel yüzme becerilerini güvenle kazanmasını sağlıyoruz. Yaş gruplarına özel sınıflarımızda eğlenerek öğreniyorlar.</p>
+          <button class="mt-6 w-full rounded-lg bg-primary-accent px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-primary-accent/90 sm:w-auto">Detaylı Bilgi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="bg-gray-800 text-white dark:bg-black">
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-4">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3">
+          <img src="ake-latest-icon.png" alt="Ake Swimming Logo" class="w-12 h-12 rounded-full ring-2 ring-primary/30">
+          <h2 class="text-xl font-bold">Ake Swimming Yüzme Kursları</h2>
+        </div>
+        <p class="mt-4 text-sm leading-relaxed text-gray-400">Herkes için yüzme eğitimi tutkusuyla, güvenli ve eğlenceli bir ortamda, her yaşa uygun profesyonel yüzme dersleri sunuyoruz.</p>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-bold uppercase tracking-wider">Hızlı Bağlantılar</h3>
+        <ul class="mt-4 space-y-2">
+          <li><a class="text-sm text-gray-400 hover:text-white" href="index.html">Ana Sayfa</a></li>
+          <li><a class="text-sm text-gray-400 hover:text-white" href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a class="text-sm text-gray-400 hover:text-white" href="derslerimiz.html">Derslerimiz</a></li>
+          <li><a class="text-sm text-gray-400 hover:text-white" href="#">Blog</a></li>
+          <li><a id="footerContact" class="text-sm text-gray-400 hover:text-white cursor-pointer">İletişim</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-bold uppercase tracking-wider">İletişim</h3>
+        <ul class="mt-4 space-y-2 text-sm text-gray-400">
+          <li class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-lg mt-0.5"> location_on </span>
+            <span>İzmir</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg"> call </span>
+            <a id="footerTel" class="hover:text-white" href="#">+90 534 586 10 01</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg"> chat </span>
+            <a id="footerWa" class="hover:text-white" target="_blank" href="#">WhatsApp ile İletişim</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg"> mail </span>
+            <a class="hover:text-white" href="mailto:kayit@akeswimming.com">kayit@akeswimming.com</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-8 border-t border-gray-700 pt-8">
+      <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
+        <p class="text-sm text-gray-500">© 2024 Ake Swimming Yüzme Kursları. Tüm Hakları Saklıdır.</p>
+        <div class="flex items-center space-x-4">
+          <a class="text-gray-400 hover:text-white" href="#">
+            <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fill-rule="evenodd"></path></svg>
+          </a>
+          <a class="text-gray-400 hover:text-white" href="#">
+            <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2zm-1.111 2.883c-2.427 0-2.748.011-3.71.058a3.362 3.362 0 00-1.22.298 3.331 3.331 0 00-1.228 1.228 3.362 3.362 0 00-.298 1.22c-.047.962-.058 1.283-.058 3.71s.011 2.748.058 3.71a3.362 3.362 0 00.298 1.22 3.331 3.331 0 001.228 1.228 3.362 3.362 0 001.22.298c.962.047 1.283.058 3.71.058s2.748-.011 3.71-.058zM12 8.355a3.645 3.645 0 100 7.29 3.645 3.645 0 000-7.29zm0 5.88a2.235 2.235 0 110-4.47 2.235 2.235 0 010 4.47zM16.145 6.45a.96.96 0 100 1.92.96.96 0 000-1.92z" fill-rule="evenodd"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- İLETİŞİM & DİNAMİK JS -->
+<script>
+  // >>> Numaranı BURADAN değiştir (ülke koduyla, boşluksuz)
+  const RAW_WHATS   = "905345861001";      // WhatsApp & tel için ham numara
+  const DISPLAY_TEL = "+90 534 586 10 01"; // Ekranda görünen format
+
+  // ------- İletişim paneli bağlantıları -------
+  const bar = document.getElementById('contactBar');
+  const openNav = document.getElementById('navContact');
+  const openBtn = document.getElementById('btnContact');
+  const openFooter = document.getElementById('footerContact');
+  const closeBtn = document.getElementById('closeBar');
+
+  const waLink = document.getElementById('waLink');
+  const telLink = document.getElementById('telLink');
+  const displayPhone = document.getElementById('displayPhone');
+
+  const footerTel = document.getElementById('footerTel');
+  const footerWa  = document.getElementById('footerWa');
+
+  function applyContacts(){
+    const waURL = `https://wa.me/${RAW_WHATS}?text=${encodeURIComponent("Merhaba, yüzme dersleri hakkında bilgi almak istiyorum.")}`;
+    if(displayPhone) displayPhone.textContent = DISPLAY_TEL;
+    if(waLink) waLink.href = waURL;
+    if(telLink) telLink.href = `tel:+${RAW_WHATS}`;
+    if(footerTel){ footerTel.textContent = DISPLAY_TEL; footerTel.href = `tel:+${RAW_WHATS}`; }
+    if(footerWa){ footerWa.href = waURL; }
+  }
+  function openBar(e){ if(e) e.preventDefault(); bar && bar.classList.remove('hidden'); }
+  function closeBarFn(){ bar && bar.classList.add('hidden'); }
+
+  applyContacts();
+  openNav && openNav.addEventListener('click', openBar);
+  openBtn && openBtn.addEventListener('click', openBar);
+  openFooter && openFooter.addEventListener('click', openBar);
+  closeBtn && closeBtn.addEventListener('click', closeBarFn);
+
+  // ------- Fade-up reveal -------
+  const REVEAL_SELECTORS = ['h1','h2','h3','p','.rounded-xl','.size-10','button'].join(',');
+  const io = ("IntersectionObserver" in window)
+    ? new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { rootMargin:'0px 0px -10% 0px', threshold:0.1 })
+    : null;
+
+  document.querySelectorAll(REVEAL_SELECTORS).forEach((el, idx)=>{
+    if(getComputedStyle(el).display !== 'none'){
+      el.classList.add('reveal');
+      io && io.observe(el);
+      el.style.transitionDelay = (Math.min(idx, 6) * 70) + 'ms';
+    }
+  });
+
+  // ------- Lazy load + blur-up -------
+  function markLoaded(img){ img.classList.add('loaded'); }
+  document.querySelectorAll('img').forEach(img=>{
+    if(!img.hasAttribute('loading')) img.setAttribute('loading','lazy');
+    const isDecorative = img.width && img.width < 80;
+    if(!isDecorative) img.classList.add('lazy-img');
+    if(img.complete){ markLoaded(img); }
+    else {
+      img.addEventListener('load', ()=>markLoaded(img), { once:true });
+      img.addEventListener('error', ()=>img.classList.remove('lazy-img'), { once:true });
+    }
+  });
+
+  // ------- Hero parallax (çok hafif) -------
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hero = document.querySelector('section.relative > div[style*="background-image"]');
+  if(hero && !prefersReduced){
+    let ticking = false;
+    const onScroll = ()=>{
+      if(!ticking){
+        requestAnimationFrame(()=>{
+          const y = window.scrollY * 0.15;
+          hero.style.backgroundPosition = `center calc(50% + ${y}px)`;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+  }
+</script>
+
+</body>
+</html>
